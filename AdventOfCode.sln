@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.32428.209
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hub", "Hub\Hub.csproj", "{7D8F6037-5B53-4BBB-B064-5D8014DE5687}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuzzleCode", "PuzzleCode\PuzzleCode.csproj", "{3E0DA8CC-6C8D-4455-BA48-677D520CFD01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{7D8F6037-5B53-4BBB-B064-5D8014DE5687}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D8F6037-5B53-4BBB-B064-5D8014DE5687}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D8F6037-5B53-4BBB-B064-5D8014DE5687}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E0DA8CC-6C8D-4455-BA48-677D520CFD01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E0DA8CC-6C8D-4455-BA48-677D520CFD01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E0DA8CC-6C8D-4455-BA48-677D520CFD01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E0DA8CC-6C8D-4455-BA48-677D520CFD01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
