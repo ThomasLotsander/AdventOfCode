@@ -13,13 +13,10 @@ namespace Hub.Services
         public async Task<bool> WriteRealDataToFile(Stream streamToReadFrom, string fileName)
         {
             var fileToWriteTo = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), fileName);
-            if (!File.Exists(fileToWriteTo))
-            {
-                await using Stream streamToWriteTo = File.Open(fileToWriteTo, FileMode.Create);
-                await streamToReadFrom.CopyToAsync(streamToWriteTo);
-            }
+            await using Stream streamToWriteTo = File.Open(fileToWriteTo, FileMode.Create);
+            await streamToReadFrom.CopyToAsync(streamToWriteTo);
 
-            return File.Exists(fileToWriteTo);
+            return FileExists(fileToWriteTo);
         }
 
         public bool FileExists(string fileName)
