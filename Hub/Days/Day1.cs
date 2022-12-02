@@ -2,20 +2,24 @@
 
 namespace Hub.Days
 {
-    public static class DayOne
+    public static class Day1
     {
-        public static void Run(string inputData)
+        public static async Task Run()
         {
-            var sampleData = SampleDataHelper.Day1SampleData;
-            PuzzleOne(inputData);
-            PuzzleTwo(inputData);
+            var sampleData = await InputDataHelper.GetTestData(InputDataHelper.Day1File);
+            var realData = await InputDataHelper.GetRealData();
+            PuzzleOne(sampleData);
+            //PuzzleOne(realData);
+            
+            PuzzleTwo(sampleData);
+            //PuzzleTwo(realData);
         }
 
-        private static void PuzzleOne(string inputData)
+        private static void PuzzleOne(string[] inputData)
         {
             var highestCount = 0;
             var currentCount = 0;
-            foreach (var input in inputData.Split('\n'))
+            foreach (var input in inputData)
             {
                 if (string.IsNullOrEmpty(input))
                 {
@@ -31,15 +35,19 @@ namespace Hub.Days
                 currentCount += int.Parse(input);
             }
 
+            if (currentCount > highestCount)
+            {
+                highestCount = currentCount;
+            }
+
             Console.WriteLine(highestCount);
         }
 
-        private static void PuzzleTwo(string inputData)
+        private static void PuzzleTwo(string[] inputData)
         {
             var list = new List<int>();
             var currentCount = 0;
-
-            foreach (var input in inputData.Split('\n'))
+            foreach (var input in inputData)
             {
                 if (string.IsNullOrEmpty(input))
                 {

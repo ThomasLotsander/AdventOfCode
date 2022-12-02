@@ -1,4 +1,5 @@
-﻿using Hub.Services;
+﻿using Hub.Helpers;
+using Hub.Services;
 
 namespace Hub;
 
@@ -14,5 +15,6 @@ public class App
     public async Task Run(string[] args)
     {
         await _dayService.Day1();
+        await _dayService.Day2();
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace PuzzleCode
+﻿using System.Reflection;
+
+namespace PuzzleCode
 {
     public class InputClient : IInputClient
     {
@@ -11,10 +13,7 @@
 
         public async Task<HttpResponseMessage> GetInputData(int day)
         {
-            var response = await _client.GetAsync($"{day}/input");
-            response.EnsureSuccessStatusCode();
-
-            return response;
+            return await _client.GetAsync($"{day}/input");
         }
     }
 }
