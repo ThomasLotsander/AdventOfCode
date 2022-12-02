@@ -29,6 +29,7 @@ static IHostBuilder CreateHostBuilder(string[] args, IConfigurationRoot? config)
         {
             services.AddHttpClient<IInputClient, InputClient>(ConfigureClient(config));
             services.AddTransient<IInputService, InputService>();
+            services.AddTransient<IFileService, FileService>();
             services.AddSingleton<IDayService, DayService>();
             services.AddSingleton<App>();
         });

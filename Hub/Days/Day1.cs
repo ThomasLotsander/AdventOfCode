@@ -6,17 +6,21 @@ namespace Hub.Days
     {
         public static async Task Run()
         {
+            Console.WriteLine("\n--- Day 1 --- \n");
+
             var sampleData = await InputDataHelper.GetTestData(InputDataHelper.Day1File);
-            var realData = await InputDataHelper.GetRealData();
+            var realData = await InputDataHelper.GetRealData(InputDataHelper.Day1RealData);
             PuzzleOne(sampleData);
             //PuzzleOne(realData);
             
-            PuzzleTwo(sampleData);
-            //PuzzleTwo(realData);
+            //PuzzleTwo(sampleData);
+            PuzzleTwo(realData);
         }
 
         private static void PuzzleOne(string[] inputData)
         {
+            Console.WriteLine("--- Puzzle 1 ---");
+
             var highestCount = 0;
             var currentCount = 0;
             foreach (var input in inputData)
@@ -35,16 +39,13 @@ namespace Hub.Days
                 currentCount += int.Parse(input);
             }
 
-            if (currentCount > highestCount)
-            {
-                highestCount = currentCount;
-            }
-
             Console.WriteLine(highestCount);
         }
 
         private static void PuzzleTwo(string[] inputData)
         {
+            Console.WriteLine("--- Puzzle 2 ---");
+
             var list = new List<int>();
             var currentCount = 0;
             foreach (var input in inputData)
@@ -57,22 +58,19 @@ namespace Hub.Days
                     {
                         if (currentCount > list.Min())
                         {
-                            list.RemoveAt(0);
+                            list.RemoveAt(list.IndexOf(list.Min()));
                             list.Add(currentCount);
                         }
                     }
 
                     currentCount = 0;
-
-                    list.Sort();
                     continue;
                 }
 
                 currentCount += int.Parse(input);
             }
 
-            var total = list.Sum();
-            Console.WriteLine(total);
+            Console.WriteLine(list.Sum());
         }
     }
 }

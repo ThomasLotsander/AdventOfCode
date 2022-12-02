@@ -7,10 +7,12 @@ namespace Hub.Services
     public class DayService : IDayService
     {
         private readonly IInputService _inputService;
+        private readonly IFileService _fileService;
 
-        public DayService(IInputService service)
+        public DayService(IInputService service, IFileService fileService)
         {
             _inputService = service;
+            _fileService = fileService;
         }
 
         public async Task Day1()
@@ -49,9 +51,28 @@ namespace Hub.Services
 
         private async Task<bool> SetUpDayData(int day)
         {
-            var response = await _inputService.GetInputDataResponse(day);
-            var stream = await _inputService.CreateStreamFromHttpResponseMessage(response);
-            return await _inputService.WriteRealDataToFile(stream);
+            var fileName = GetRealFileName(day);
+            if (!_fileService.FileExists(fileName))
+            {
+                var response = await _inputService.GetInputDataResponse(day);
+                var stream = await _inputService.CreateStreamFromHttpResponseMessage(response);
+                return await _fileService.WriteRealDataToFile(stream, fileName);
+            }
+
+            return true;
+        }
+
+        private string GetRealFileName(int day)
+        {
+            switch (day)
+            {
+                case 1:
+                    return InputDataHelper.Day1RealData;
+                case 2:
+                    return InputDataHelper.Day2RealData;
+                default:
+                    return "test";
+            }
         }
     }
 }
