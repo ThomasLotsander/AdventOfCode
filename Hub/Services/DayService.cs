@@ -67,9 +67,9 @@ namespace Hub.Services
             switch (day)
             {
                 case 1:
-                    return InputDataHelper.Day1RealData;
+                    return FileNameHelper.Day1RealData;
                 case 2:
-                    return InputDataHelper.Day2RealData;
+                    return FileNameHelper.Day2RealData;
                 default:
                     return "test";
             }
