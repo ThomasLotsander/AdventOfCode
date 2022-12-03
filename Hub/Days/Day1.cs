@@ -8,12 +8,12 @@ namespace Hub.Days
         {
             Console.WriteLine("\n--- Day 1 --- \n");
 
-            var sampleData = await InputDataHelper.GetTestData(FileNameHelper.Day1File);
-            var realData = await InputDataHelper.GetRealData(FileNameHelper.Day1RealData);
+            var sampleData = await InputDataHelper.GetTestData(FileNameHelper.GetSampleDataFileName(1));
+            var realData = await InputDataHelper.GetRealData(FileNameHelper.GetRealFileName(1));
             PuzzleOne(sampleData);
-            //PuzzleOne(realData);
-            
-            //PuzzleTwo(sampleData);
+            PuzzleOne(realData);
+
+            PuzzleTwo(sampleData);
             PuzzleTwo(realData);
         }
 

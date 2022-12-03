@@ -16,5 +16,6 @@ public class App
     {
         await _dayService.Day1();
         await _dayService.Day2();
+        await _dayService.Day3();
     }
 }

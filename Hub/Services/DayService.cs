@@ -41,7 +41,14 @@ namespace Hub.Services
 
         public async Task Day3()
         {
-            throw new NotImplementedException();
+            if (await SetUpDayData(3))
+            {
+                await Days.Day3.Run();
+            }
+            else
+            {
+                Console.WriteLine("Day 3, could not write data to file");
+            }
         }
 
         public async Task Day4()
@@ -51,7 +58,7 @@ namespace Hub.Services
 
         private async Task<bool> SetUpDayData(int day)
         {
-            var fileName = GetRealFileName(day);
+            var fileName = FileNameHelper.GetRealFileName(day);
             if (!_fileService.FileExists(fileName))
             {
                 var response = await _inputService.GetInputDataResponse(day);
@@ -60,19 +67,6 @@ namespace Hub.Services
             }
 
             return true;
-        }
-
-        private string GetRealFileName(int day)
-        {
-            switch (day)
-            {
-                case 1:
-                    return FileNameHelper.Day1RealData;
-                case 2:
-                    return FileNameHelper.Day2RealData;
-                default:
-                    return "test";
-            }
         }
     }
 }
