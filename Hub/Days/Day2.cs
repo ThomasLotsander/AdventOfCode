@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Hub.Helpers;
-using Microsoft.Extensions.Logging;
+﻿using Hub.Helpers;
 
 namespace Hub.Days
 {
     public static class Day2
     {
-        // Points 
+        // Points
         private const int Rock = 1;
+
         private const int Paper = 2;
         private const int Scissors = 3;
         private const int Loss = 0;
@@ -92,10 +87,13 @@ namespace Hub.Days
             {
                 case "X": // Loss
                     return 0;
-                case "Y": // Draw 
+
+                case "Y": // Draw
                     return 1;
+
                 case "Z": // Win
                     return 2;
+
                 default:
                     return 99;
             }

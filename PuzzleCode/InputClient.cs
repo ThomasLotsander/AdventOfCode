@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace PuzzleCode
+﻿namespace PuzzleCode
 {
     public class InputClient : IInputClient
     {

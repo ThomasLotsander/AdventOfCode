@@ -18,6 +18,4 @@ namespace Hub.Helpers
             return await File.ReadAllLinesAsync(path);
         }
     }
-
-    
 }

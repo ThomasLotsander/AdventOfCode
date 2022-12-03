@@ -12,10 +12,10 @@ namespace Hub.Days
 
             var sampleData = await InputDataHelper.GetTestData(FileNameHelper.GetSampleDataFileName(3));
             var realData = await InputDataHelper.GetRealData(FileNameHelper.GetRealFileName(3));
-            
+
             _alphabetPriority = new Dictionary<char, int>();
             _alphabetPriority.AddAlphabet();
-            
+
             PuzzleOne(sampleData);
             PuzzleOne(realData);
 
