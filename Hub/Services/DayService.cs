@@ -1,4 +1,5 @@
-﻿using Hub.Helpers;
+﻿using Hub.Days;
+using Hub.Helpers;
 
 namespace Hub.Services
 {
@@ -51,7 +52,14 @@ namespace Hub.Services
 
         public async Task Day4()
         {
-            throw new NotImplementedException();
+            if (await SetUpDayData(4))
+            {
+                await Days.Day4.Run();
+            }
+            else
+            {
+                Console.WriteLine("Day 4, could not write data to file");
+            }
         }
 
         private async Task<bool> SetUpDayData(int day)

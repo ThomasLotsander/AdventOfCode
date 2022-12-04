@@ -13,8 +13,9 @@ public class App
 
     public async Task Run(string[] args)
     {
-        await _dayService.Day1();
-        await _dayService.Day2();
-        await _dayService.Day3();
+        //await _dayService.Day1();
+        //await _dayService.Day2();
+        //await _dayService.Day3();
+        await _dayService.Day4();
     }
 }
