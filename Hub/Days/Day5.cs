@@ -29,61 +29,49 @@ namespace Hub.Days
             PuzzleTwo(realData);
         }
 
-        private static void PuzzleOneDummy(string[] inputData)
+        private static List<List<string>> CreateCargoContainers(int numberOfColumns)
         {
             var columnsList = new List<List<string>>();
-            var columns = new List<int>() { 1, 2, 3 };
-            for (int i = 0; i < columns.Count; i++)
+            for (int i = 0; i < numberOfColumns; i++)
             {
                 columnsList.Add(new List<string>());
             }
 
-            var actionList = new List<string>();
-            var test1 = "move 1 from 2 to 1";
-            var test2 = "move 3 from 1 to 3";
-            var test3 = "move 2 from 2 to 1";
-            var test4 = "move 1 from 1 to 2";
-            actionList.Add(test1);
-            actionList.Add(test2);
-            actionList.Add(test3);
-            actionList.Add(test4);
+            return columnsList;
+        }
 
-            var actions = new List<Action>();
-
-
-            foreach (var row in actionList)
+        private static void AddCargoToContainers(List<List<string>> cargoContainers, string[] cargoData)
+        {
+            foreach (var row in cargoData)
             {
-                var actionNumber = row.Where(char.IsDigit).Select(x => int.Parse(x.ToString())).ToList();
-
-                if (actionNumber.Count == 3)
+                var cargoIndex = 1;
+                foreach (var container in cargoContainers)
                 {
-                    actions.Add(new Action()
-                    { Amount = actionNumber[0], From = actionNumber[1] - 1, To = actionNumber[2] - 1 });
+                    if (char.IsLetter(row[cargoIndex]))
+                    {
+                        container.Add(row[cargoIndex].ToString());
+                    }
+
+                    cargoIndex += 4;
                 }
             }
+        }
 
-            columnsList[0].Add("N");
-            columnsList[0].Add("Z");
-
-            columnsList[1].Add("D");
-            columnsList[1].Add("C");
-            columnsList[1].Add("M");
-
-            columnsList[2].Add("P");
-
-
-            foreach (var action in actions)
+        private static void RearrangeCargo(List<List<string>> cargoContainers, string[] rearrangeActions, bool reverse = true)
+        {
+            foreach (var action in rearrangeActions)
             {
-                var itemToMoves = columnsList[action.From].Take(action.Amount).ToList();
-                itemToMoves.Reverse();
-                columnsList[action.From].RemoveRange(0, action.Amount);
-                columnsList[action.To].InsertRange(0, itemToMoves);
-            }
+                var actions = action.Split(' ').Where(x => int.TryParse(x, out _)).Select(int.Parse).ToList();
+                var amount = actions[0];
+                var from = actions[1] - 1;
+                var to = actions[2] - 1;
 
-            var result = columnsList.Select(sublist => sublist.First()).ToList();
-            foreach (var res in result)
-            {
-                Console.Write(res);
+                var itemToMoves = cargoContainers[from].Take(amount).ToList();
+                if (reverse)
+                    itemToMoves.Reverse();
+
+                cargoContainers[from].RemoveRange(0, amount);
+                cargoContainers[to].InsertRange(0, itemToMoves);
             }
         }
 
@@ -93,131 +81,44 @@ namespace Hub.Days
 
             var firstEmptyLineIndex = Array.FindIndex(inputData, string.IsNullOrWhiteSpace);
             var cargoRowsIndex = firstEmptyLineIndex - 1;
-
-
-            var columnsList = new List<List<string>>();
-            var numberOfColumns = inputData[cargoRowsIndex].Replace(" ", string.Empty).Select(x => int.Parse(x.ToString())).ToList();
+            var numberOfColumns = inputData[cargoRowsIndex].Replace(" ", string.Empty).Select(x => int.Parse(x.ToString())).Count();
 
             // Create x amount of lists to hold cargo 
-            for (int i = 0; i < numberOfColumns.Count; i++)
-            {
-                columnsList.Add(new List<string>());
-            }
+            var cargoContainers = CreateCargoContainers(numberOfColumns);
 
             // Add cargo to correct list
-            for (int i = 0; i < cargoRowsIndex; i++)
-            {
-                var cargoIndex = 1;
-                var line = inputData[i];
-                for (int j = 0; j < numberOfColumns.Count; j++)
-                {
-                    if (char.IsLetter(line[cargoIndex]))
-                    {
-                        columnsList[j].Add(line[cargoIndex].ToString());
-                    }
-
-                    cargoIndex += 4;
-                }
-            }
+            AddCargoToContainers(cargoContainers, inputData.Take(cargoRowsIndex).ToArray());
 
             // Add all actions to list
-            var actions = new List<Action>();
-            int id = 1;
-            foreach (var row in inputData.Skip(firstEmptyLineIndex + 1))
-            {
-                //var actionNumber = row.Where(char.IsDigit).Select(x => int.Parse(x.ToString())).ToList();
+            
+            RearrangeCargo(cargoContainers, inputData.Skip(firstEmptyLineIndex + 1).ToArray());
 
-                var actionNumbers = row.Split(' ').Where(x => int.TryParse(x, out _)).Select(int.Parse).ToList();
-
-                actions.Add(new Action()
-                { Amount = actionNumbers[0], From = actionNumbers[1] - 1, To = actionNumbers[2] - 1 });
-            }
-
-
-            foreach (var action in actions)
-            {
-                var itemToMoves = columnsList[action.From].Take(action.Amount).ToList();
-                itemToMoves.Reverse();
-                columnsList[action.From].RemoveRange(0, action.Amount);
-                columnsList[action.To].InsertRange(0, itemToMoves);
-            }
-
-            var result = columnsList.Select(sublist => sublist.First()).ToList();
-            foreach (var res in result)
-            {
-                Console.Write(res);
-            }
+            var result = string.Join(string.Empty, cargoContainers.Select(sublist => sublist.First()).ToList());
+            Console.WriteLine(result);
         }
 
+        // Exactly the same as Puzzle One, only exception that in P2 i send in Reverse: False in RearrangeCargo
         private static void PuzzleTwo(string[] inputData)
         {
             Console.WriteLine("--- Puzzle 2 ---");
 
             var firstEmptyLineIndex = Array.FindIndex(inputData, string.IsNullOrWhiteSpace);
             var cargoRowsIndex = firstEmptyLineIndex - 1;
-
-
-            var columnsList = new List<List<string>>();
-            var numberOfColumns = inputData[cargoRowsIndex].Replace(" ", string.Empty).Select(x => int.Parse(x.ToString())).ToList();
+            var numberOfColumns = inputData[cargoRowsIndex].Replace(" ", string.Empty).Select(x => int.Parse(x.ToString())).Count();
 
             // Create x amount of lists to hold cargo 
-            for (int i = 0; i < numberOfColumns.Count; i++)
-            {
-                columnsList.Add(new List<string>());
-            }
+            var cargoContainers = CreateCargoContainers(numberOfColumns);
 
             // Add cargo to correct list
-            for (int i = 0; i < cargoRowsIndex; i++)
-            {
-                var cargoIndex = 1;
-                var line = inputData[i];
-                for (int j = 0; j < numberOfColumns.Count; j++)
-                {
-                    if (char.IsLetter(line[cargoIndex]))
-                    {
-                        columnsList[j].Add(line[cargoIndex].ToString());
-                    }
-
-                    cargoIndex += 4;
-                }
-            }
+            AddCargoToContainers(cargoContainers, inputData.Take(cargoRowsIndex).ToArray());
 
             // Add all actions to list
-            var actions = new List<Action>();
-            int id = 1;
-            foreach (var row in inputData.Skip(firstEmptyLineIndex + 1))
-            {
-                //var actionNumber = row.Where(char.IsDigit).Select(x => int.Parse(x.ToString())).ToList();
 
-                var actionNumbers = row.Split(' ').Where(x => int.TryParse(x, out _)).Select(int.Parse).ToList();
+            RearrangeCargo(cargoContainers, inputData.Skip(firstEmptyLineIndex + 1).ToArray(), false);
 
-                actions.Add(new Action()
-                { Amount = actionNumbers[0], From = actionNumbers[1] - 1, To = actionNumbers[2] - 1 });
-            }
-
-
-            foreach (var action in actions)
-            {
-                var itemToMoves = columnsList[action.From].Take(action.Amount).ToList();
-                //itemToMoves.Reverse();
-                columnsList[action.From].RemoveRange(0, action.Amount);
-                columnsList[action.To].InsertRange(0, itemToMoves);
-            }
-
-            var result = columnsList.Select(sublist => sublist.First()).ToList();
-            foreach (var res in result)
-            {
-                Console.Write(res);
-            }
-
+            var result = string.Join(string.Empty, cargoContainers.Select(sublist => sublist.First()).ToList());
+            Console.WriteLine(result);
         }
     }
-
-    class Action
-    {
-        public int ID { get; set; }
-        public int Amount { get; set; }
-        public int From { get; set; }
-        public int To { get; set; }
-    }
+    
 }
