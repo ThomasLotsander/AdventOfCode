@@ -7,14 +7,14 @@ using Hub.Helpers;
 
 namespace Hub.Days
 {
-    public class Day4
+    public static class Day4
     {
-        public static async Task Run()
+        public static async Task Run(int day)
         {
-            Console.WriteLine("\n--- Day 4 --- \n");
+            Console.WriteLine($"\n--- Day {day} --- \n");
 
-            var sampleData = await InputDataHelper.GetTestData(FileNameHelper.GetSampleDataFileName(4));
-            var realData = await InputDataHelper.GetRealData(FileNameHelper.GetRealFileName(4));
+            var sampleData = await InputDataHelper.GetTestData(FileNameHelper.GetSampleDataFileName(day));
+            var realData = await InputDataHelper.GetRealData(FileNameHelper.GetRealFileName(day));
 
             //PuzzleOne(realData);
             PuzzleTwo(realData);

@@ -13,12 +13,12 @@ namespace Hub.Days
         private const int Draw = 3;
         private const int Win = 6;
 
-        public static async Task Run()
+        public static async Task Run(int day)
         {
-            Console.WriteLine("\n--- Day 2 --- \n");
+            Console.WriteLine($"\n--- Day {day} --- \n");
 
-            var sampleData = await InputDataHelper.GetTestData(FileNameHelper.GetSampleDataFileName(2));
-            var realData = await InputDataHelper.GetRealData(FileNameHelper.GetRealFileName(2));
+            var sampleData = await InputDataHelper.GetTestData(FileNameHelper.GetSampleDataFileName(day));
+            var realData = await InputDataHelper.GetRealData(FileNameHelper.GetRealFileName(day));
 
             Puzzle1(sampleData);
             Puzzle1(realData);

@@ -6,12 +6,12 @@ namespace Hub.Days
     {
         private static Dictionary<char, int> _alphabetPriority;
 
-        public static async Task Run()
+        public static async Task Run(int day)
         {
-            Console.WriteLine("\n--- Day 3 --- \n");
+            Console.WriteLine($"\n--- Day {day} --- \n");
 
-            var sampleData = await InputDataHelper.GetTestData(FileNameHelper.GetSampleDataFileName(3));
-            var realData = await InputDataHelper.GetRealData(FileNameHelper.GetRealFileName(3));
+            var sampleData = await InputDataHelper.GetTestData(FileNameHelper.GetSampleDataFileName(day));
+            var realData = await InputDataHelper.GetRealData(FileNameHelper.GetRealFileName(day));
 
             _alphabetPriority = new Dictionary<char, int>();
             _alphabetPriority.AddAlphabet();

@@ -16,63 +16,43 @@ namespace Hub.Services
 
         public async Task Day1()
         {
-            if (await SetUpDayData(1))
-            {
-                await Days.Day1.Run();
-            }
-            else
-            {
-                Console.WriteLine("Day 1, could not write data to file");
-            }
+            await SetUpDayData(1);
+            await Days.Day4.Run(1);
         }
 
         public async Task Day2()
         {
-            if (await SetUpDayData(2))
-            {
-                await Days.Day2.Run();
-            }
-            else
-            {
-                Console.WriteLine("Day 2, could not write data to file");
-            }
+            await SetUpDayData(2);
+            await Days.Day4.Run(2);
         }
 
         public async Task Day3()
         {
-            if (await SetUpDayData(3))
-            {
-                await Days.Day3.Run();
-            }
-            else
-            {
-                Console.WriteLine("Day 3, could not write data to file");
-            }
+            await SetUpDayData(3);
+            await Days.Day4.Run(3);
         }
 
         public async Task Day4()
         {
-            if (await SetUpDayData(4))
-            {
-                await Days.Day4.Run();
-            }
-            else
-            {
-                Console.WriteLine("Day 4, could not write data to file");
-            }
+            await SetUpDayData(4);
+            await Days.Day4.Run(4);
         }
 
-        private async Task<bool> SetUpDayData(int day)
+        public async Task Day5()
+        {
+            await SetUpDayData(5);
+            await Days.Day5.Run(5);
+        }
+
+        private async Task SetUpDayData(int day)
         {
             var fileName = FileNameHelper.GetRealFileName(day);
             if (!_fileService.FileExists(fileName))
             {
                 var response = await _inputService.GetInputDataResponse(day);
                 var stream = await _inputService.CreateStreamFromHttpResponseMessage(response);
-                return await _fileService.WriteRealDataToFile(stream, fileName);
+                await _fileService.WriteRealDataToFile(stream, fileName);
             }
-
-            return true;
         }
     }
 }

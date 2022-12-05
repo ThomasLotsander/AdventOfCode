@@ -4,12 +4,12 @@ namespace Hub.Days
 {
     public static class Day1
     {
-        public static async Task Run()
+        public static async Task Run(int day)
         {
-            Console.WriteLine("\n--- Day 1 --- \n");
+            Console.WriteLine($"\n--- Day {day} --- \n");
 
-            var sampleData = await InputDataHelper.GetTestData(FileNameHelper.GetSampleDataFileName(1));
-            var realData = await InputDataHelper.GetRealData(FileNameHelper.GetRealFileName(1));
+            var sampleData = await InputDataHelper.GetTestData(FileNameHelper.GetSampleDataFileName(day));
+            var realData = await InputDataHelper.GetRealData(FileNameHelper.GetRealFileName(day));
             PuzzleOne(sampleData);
             PuzzleOne(realData);
 

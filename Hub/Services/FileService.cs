@@ -4,7 +4,7 @@ namespace Hub.Services
 {
     public class FileService : IFileService
     {
-        public async Task<bool> WriteRealDataToFile(Stream streamToReadFrom, string fileName)
+        public async Task WriteRealDataToFile(Stream streamToReadFrom, string fileName)
         {
             try
             {
@@ -12,8 +12,14 @@ namespace Hub.Services
                 await using Stream streamToWriteTo = File.Open(fileToWriteTo, FileMode.Create);
                 await streamToReadFrom.CopyToAsync(streamToWriteTo);
 
-                Console.WriteLine($"File {fileName} created");
-                return FileExists(fileToWriteTo);
+                if (FileExists(fileToWriteTo))
+                {
+                    Console.WriteLine($"File {fileName} created");
+                }
+                else
+                {
+                    Console.WriteLine("Failed to create file: " + fileName);
+                }
             }
             catch (Exception e)
             {

@@ -2,7 +2,7 @@
 
 public interface IFileService
 {
-    Task<bool> WriteRealDataToFile(Stream streamToReadFrom, string fileName);
+    Task WriteRealDataToFile(Stream streamToReadFrom, string fileName);
 
     bool FileExists(string fileName);
 }
