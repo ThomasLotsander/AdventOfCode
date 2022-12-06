@@ -7,6 +7,7 @@ namespace Hub.Services
     {
         private readonly IInputService _inputService;
         private readonly IFileService _fileService;
+        private IDayService _dayServiceImplementation;
 
         public DayService(IInputService service, IFileService fileService)
         {
@@ -42,6 +43,12 @@ namespace Hub.Services
         {
             await SetUpDayData(5);
             await Days.Day5.Run(5);
+        }
+
+        public async Task Day6()
+        {
+            await SetUpDayData(6);
+            await Days.Day6.Run(6);
         }
 
         private async Task SetUpDayData(int day)
