@@ -13,4 +13,5 @@ public interface IDayService
     Task Day5();
 
     Task Day6();
+    Task Day7();
 }
