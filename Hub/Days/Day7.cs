@@ -11,12 +11,10 @@ namespace Hub.Days
 {
     public static class Day7
     {
-        private static Dictionary<int, List<Dir>> _hierarchyManager = new();
-        static List<Dir> _structure = new();
-        static Dir _currentDir = null;
-        static Dir _parrent = null;
-        static int _directoryDepthIndex = 0;
-        private static int _finalResult = 0;
+        static List<Directory> _directories;
+        static Directory _currentDir;
+        private static int _finalResult;
+        private static Dictionary<int, string> _sizeManager;
 
         public static async Task Run(int day)
         {
@@ -25,79 +23,86 @@ namespace Hub.Days
             var sampleData = await InputDataHelper.GetTestData(FileNameHelper.GetSampleDataFileName(day));
             var realData = await InputDataHelper.GetRealData(FileNameHelper.GetRealFileName(day));
 
-            PuzzleOne(sampleData);
+            //PuzzleOne(sampleData);
             //PuzzleTwo(sampleData);
 
             //PuzzleOne(realData);
-            //PuzzleTwo(realData);
+            PuzzleTwo(realData);
         }
 
-        private static void FuckingHell(List<Dir> dirs)
+        private static void FuckingHell(List<Directory> directories)
         {
-            if (dirs.Any(x => x.Directories.Any()))
+            if (directories.Any(x => x.Children.Any()))
             {
-                foreach (var dir in dirs)
+                foreach (var child in directories)
                 {
-                    FuckingHell(dir.Directories);
+                    FuckingHell(child.Children);
                 }
             }
 
-            foreach (var dir in dirs)
+            foreach (var directory in directories)
             {
-                int totalSum = 0;
-                totalSum = CalculateFileSizes(dir, totalSum, dir.Name);
+                var totalSum = 0;
+                totalSum = CalculateFileSizes(directory, totalSum);
                 if (totalSum <= 100000)
                 {
-                    Console.WriteLine("Dir: " + dir.Name + " size " + totalSum);
+                    Console.WriteLine("Dir: " + directory.Name + " size " + totalSum);
                     _finalResult += totalSum;
                 }
             }
-                    
         }
 
-
-        private static int CalculateFileSizes(Dir dir, int totalSize, string dirName)
+        private static void FuckingHell2(List<Directory> directories, int freeSpaceNeeded)
         {
-            if (dir.Directories.Any())
+            if (directories.Any(x => x.Children.Any()))
             {
-                foreach (var d in dir.Directories)
+                foreach (var child in directories)
                 {
-                    totalSize = CalculateFileSizes(d, totalSize, d.Name);
+                    FuckingHell2(child.Children, freeSpaceNeeded);
                 }
             }
 
-            if (!dir.Files.Any())
+            foreach (var directory in directories)
+            {
+                var totalSum = 0;
+                totalSum = CalculateFileSizes(directory, totalSum);
+                if (totalSum >= freeSpaceNeeded)
+                {
+                    Console.WriteLine("Dir: " + directory.Name + " size " + totalSum);
+                    _finalResult += totalSum;
+                    _sizeManager.Add(totalSum, directory.Name);
+                }
+            }
+        }
+
+        private static int CalculateFileSizes(Directory directory, int totalSize)
+        {
+            if (directory.Children.Any())
+            {
+                foreach (var d in directory.Children)
+                {
+                    totalSize = CalculateFileSizes(d, totalSize);
+                }
+            }
+
+            if (!directory.Files.Any())
             {
                 return totalSize;
             }
 
-            var dirSize = dir.Files.Select(x => x.FileSize).Sum();
+            var dirSize = directory.Files.Select(x => x.FileSize).Sum();
             totalSize += dirSize;
             return totalSize;
         }
 
         private static void SetCurrentDirectory(string directoryName)
         {
-            var current = _hierarchyManager
-                .Where(x => x.Key == _directoryDepthIndex)
-                .Select(x => x.Value.FirstOrDefault(y => y.Name == directoryName)).FirstOrDefault();
+            var current = _currentDir.Children.FirstOrDefault(x => x.Name == directoryName);
             _currentDir = current;
         }
 
-        private static void PuzzleOne(string[] inputData)
+        private static void CreateDirectoryFileSystem(string[] inputData)
         {
-            _currentDir = new Dir
-            {
-                Name = "/",
-                Index = 0
-            };
-
-            _structure.Add(_currentDir);
-            _parrent = _currentDir;
-
-            Console.WriteLine("--- Puzzle 1 ---");
-
-            // Skip first line
             for (int i = 1; i < inputData.Length; i++)
             {
                 var row = inputData[i];
@@ -108,23 +113,15 @@ namespace Hub.Days
                     if (row.StartsWith("$ cd"))
                     {
                         var directoryName = row.Split(' ').Last();
-                        SetCurrentDirectory(directoryName);
-                        _parrent = _currentDir;
+
                         if (directoryName == "..")
                         {
-                            _directoryDepthIndex--;
-
+                            _currentDir = _currentDir.Parent;
                         }
                         else
                         {
-                            _directoryDepthIndex++;
+                            SetCurrentDirectory(directoryName);
                         }
-
-
-                        //foreach (var dir in _structure)
-                        //{
-                        //    DirExists(dir, directoryName);
-                        //}
                     }
 
                     else if (row.Equals("$ ls"))
@@ -139,14 +136,13 @@ namespace Hub.Days
                         foreach (var dir in dirs)
                         {
                             var dirName = dir.Split(' ').Last();
-                            var newDir = new Dir
+                            var newDir = new Directory
                             {
                                 Name = dirName,
-                                Index = _directoryDepthIndex,
-                                Parrent = _parrent
+                                Parent = _currentDir
                             };
-                            _currentDir.Directories.Add(newDir);
 
+                            _currentDir.Children.Add(newDir);
                         }
 
                         foreach (var file in files)
@@ -161,34 +157,69 @@ namespace Hub.Days
 
                             _currentDir.Files.Add(newFile);
                         }
-
-                        var data = new List<Dir>();
-                        if (_hierarchyManager.Any(x => x.Key == _directoryDepthIndex))
-                        {
-                            //data = _hierarchyManager[_directoryDepthIndex];
-                            //data.AddRange(_currentDir.Directories);
-
-                        }
-                        else
-                        {
-                            _hierarchyManager.Add(_directoryDepthIndex, _currentDir.Directories);
-
-                        }
-
-
                     }
                 }
             }
+        }
+
+        private static void PuzzleOne(string[] inputData)
+        {
+            Console.WriteLine("--- Puzzle 1 ---");
+            _finalResult = 0;
+            _directories = new List<Directory>();
+            _currentDir = new Directory
+            {
+                Name = "/",
+                Index = 0
+            };
+
+            _directories.Add(_currentDir);
 
 
-            FuckingHell(_structure);
+            // Skip first line
+            CreateDirectoryFileSystem(inputData);
+
+
+            FuckingHell(_directories);
             Console.WriteLine("Result: " + _finalResult);
-
         }
 
         private static void PuzzleTwo(string[] inputData)
         {
             Console.WriteLine("--- Puzzle 2 ---");
+            _sizeManager = new Dictionary<int, string>();
+
+
+            _directories = new List<Directory>();
+            _currentDir = new Directory
+            {
+                Name = "/",
+                Index = 0
+            };
+
+            _directories.Add(_currentDir);
+            // Skip first line
+            CreateDirectoryFileSystem(inputData);
+
+            var test = CalculateFileSizes(_directories.First(), 0);
+            var neededSpace = GetHowMuchDiskSpaceNeededToFreeUp(test);
+            Console.WriteLine(neededSpace);
+
+            FuckingHell2(_directories, neededSpace);
+            var result = _sizeManager.Min(x => x.Key);
+        }
+
+        private static int GetHowMuchDiskSpaceNeededToFreeUp(int usedSpace)
+        {
+            var totalDiskSpaceAvailable = 70000000;
+            var neededAvailableSpace = 30000000;
+            
+            //usedSpace = 48381165;
+
+            var unUsedSpace = totalDiskSpaceAvailable - usedSpace;
+            var neededSpace = neededAvailableSpace - unUsedSpace;
+
+            return neededSpace;
         }
     }
 }

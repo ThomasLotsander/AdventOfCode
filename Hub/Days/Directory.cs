@@ -1,11 +1,11 @@
 ﻿namespace Hub.Days;
 
-public class Dir
+public class Directory
 {
     public int Index { get; set; }
     public string? Name { get; set; }
-    public Dir Parrent { get; set; }
+    public Directory? Parent { get; set; }
 
     public List<DirectoryFile>? Files { get; set; } = new List<DirectoryFile>();
-    public List<Dir> Directories { get; set; } = new List<Dir>();
+    public List<Directory> Children { get; set; } = new List<Directory>();
 }
