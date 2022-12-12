@@ -57,6 +57,12 @@ namespace Hub.Services
             await Days.Day7.Run(7);
         }
 
+        public async Task Day8()
+        {
+            await SetUpDayData(8);
+            await Days.Day8.Run(8);
+        }
+
         private async Task SetUpDayData(int day)
         {
             var fileName = FileNameHelper.GetRealFileName(day);

@@ -19,6 +19,7 @@ public class App
         //await _dayService.Day4();
         //await _dayService.Day5();
         //await _dayService.Day6();
-        await _dayService.Day7();
+        //await _dayService.Day7();
+        await _dayService.Day8();
     }
 }
