@@ -7,23 +7,42 @@ using Hub.Helpers;
 
 namespace Hub.Days
 {
-    public static class Day8
+    public class Day8 : DefaultDaySetup
     {
-        public static async Task Run(int day)
+        public override async Task Run()
         {
-            Console.WriteLine($"\n--- Day {day} --- \n");
+            Console.WriteLine($"\n--- Day {8} --- \n");
 
-            var sampleData = await InputDataHelper.GetTestData(FileNameHelper.GetSampleDataFileName(day));
-            var realData = await InputDataHelper.GetRealData(FileNameHelper.GetRealFileName(day));
+            await Setup(9);
+            if (SampleData != null)
+            {
+                await PuzzleOne(SampleData);
+                await PuzzleTwo(SampleData);
+            }
 
-            //PuzzleOne(realData);
-            //PuzzleOne(sampleData);
-            //PuzzleTwo(sampleData);
-
-            PuzzleTwo(realData);
+            if (RealData != null)
+            {
+                await PuzzleOne(RealData);
+                await PuzzleTwo(RealData);
+            }
         }
 
-        private static int[,] CreateForrestGrid(string[] input)
+        public override async Task PuzzleOne(string[] inputData)
+        {
+            Console.WriteLine("--- Puzzle 1 ---");
+            var grid = CreateForrestGrid(inputData);
+            CountVisibleTreesFromOutside(grid);
+        }
+
+
+        public override async Task PuzzleTwo(string[] inputData)
+        {
+            Console.WriteLine("--- Puzzle 2 ---");
+            var grid = CreateForrestGrid(inputData);
+            CountVisibleTreesFromTreeHouse(grid);
+        }
+
+        private int[,] CreateForrestGrid(string[] input)
         {
             var grid = new int[input.Length, input[0].Length];
             for (int row = 0; row < input.Length; row++)
@@ -38,7 +57,7 @@ namespace Hub.Days
             return grid;
         }
 
-        private static void CountVisibleTreesFromOutside(int[,] grid)
+        private void CountVisibleTreesFromOutside(int[,] grid)
         {
             var rows = grid.GetLength(0);
             var columns = grid.GetLength(1);
@@ -73,7 +92,7 @@ namespace Hub.Days
             Console.WriteLine(outerTrees + visibleTrees);
         }
 
-        private static bool IsVisibleFromOutside(int treeHeight, int[] row, int index)
+        private bool IsVisibleFromOutside(int treeHeight, int[] row, int index)
         {
             var isVisible =
                 row.Take(index).All(x => x < treeHeight) ||
@@ -82,7 +101,7 @@ namespace Hub.Days
             return isVisible;
         }
 
-        private static void CountVisibleTreesFromTreeHouse(int[,] grid)
+        private void CountVisibleTreesFromTreeHouse(int[,] grid)
         {
             var rows = grid.GetLength(0);
             var columns = grid.GetLength(1);
@@ -115,7 +134,7 @@ namespace Hub.Days
             Console.WriteLine(scenicScore);
         }
 
-        private static int CountVisibleTreesFromTreeHouse(int treeHeight, int[] row, int index)
+        private int CountVisibleTreesFromTreeHouse(int treeHeight, int[] row, int index)
         {
             int leftOrUp = 0;
             int rightOrDown = 0;
@@ -146,23 +165,6 @@ namespace Hub.Days
             }
 
             return leftOrUp * rightOrDown;
-        }
-
-        private static void PuzzleOne(string[] inputData)
-        {
-            Console.WriteLine("--- Puzzle 1 ---");
-            var grid = CreateForrestGrid(inputData);
-            CountVisibleTreesFromOutside(grid);
-
-
-
-        }
-
-        private static void PuzzleTwo(string[] inputData)
-        {
-            Console.WriteLine("--- Puzzle 2 ---");
-            var grid = CreateForrestGrid(inputData);
-            CountVisibleTreesFromTreeHouse(grid);
         }
     }
 }

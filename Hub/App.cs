@@ -1,4 +1,5 @@
-﻿using Hub.Services;
+﻿using Hub.Days;
+using Hub.Services;
 
 namespace Hub;
 
@@ -13,6 +14,7 @@ public class App
 
     public async Task Run(string[] args)
     {
+        await _dayService.SetUpDayData();
         //await _dayService.Day1();
         //await _dayService.Day2();
         //await _dayService.Day3();
@@ -20,6 +22,7 @@ public class App
         //await _dayService.Day5();
         //await _dayService.Day6();
         //await _dayService.Day7();
-        await _dayService.Day8();
+        //await _dayService.Day8();
+        await _dayService.Day9();
     }
 }

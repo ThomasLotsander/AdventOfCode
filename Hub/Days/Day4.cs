@@ -16,7 +16,9 @@ namespace Hub.Days
             var sampleData = await InputDataHelper.GetTestData(FileNameHelper.GetSampleDataFileName(day));
             var realData = await InputDataHelper.GetRealData(FileNameHelper.GetRealFileName(day));
 
-            //PuzzleOne(realData);
+            PuzzleOne(sampleData);
+            PuzzleOne(realData);
+            PuzzleTwo(sampleData);
             PuzzleTwo(realData);
         }
 
